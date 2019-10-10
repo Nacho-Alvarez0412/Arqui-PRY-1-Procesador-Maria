@@ -1,0 +1,56 @@
+PASM--- Pura tusa Assembly
+
+Commentarios son precedidos por "//"
+Final de una instruccion (o de linea) ";"
+inicio de una instruccion "*"
+
+Los registros:
+
+AX
+BX
+CX     Todos van a ser variables declaradas en NASM
+DX
+EX
+PC
+IR
+
+Stack:
+
+Vamos a utilizar el estack de NASM
+
+
+Banderas:
+OF
+ZF
+SF
+CF
+
+Las banderas se mantienen igual (solo se hace print de su estado desde NASM)
+
+
+La "memoria", que se debe imprimir en pantalla va a ser una variable de 1000 bytes donde vamos a imprimir 
+de byte en byte, separando la informacion por un 0.
+
+Instrucciones:
+
+Inician con * luego son 3 digitos (para facilitar la lectura de las instrucciones)
+
+ mov = *cam (cambiar)
+ loop = *itr(iterar)
+ push= *met(meter)
+ pop = *sac(sacar)
+ cmp = *chk(check)
+ rol = *roi(rotar izquierda)
+ ror = *rod(rotar derecha)
+ shr = *cod (correr derecha)
+ shl = *coi(correr izquierda)
+ test = *prb(prueba)
+ and = *gem(gemelitos)
+ je = *sgm(saltar si gemelitos)
+ jne = *sng(saltar no gemelitos)
+ jz = *sco(saltar cero)
+ jnz = *snc(saltar no cero)
+
+ 
+
+
