@@ -6,11 +6,11 @@ inicio de una instruccion "*"
 
 Los registros:
 
-AX
-BX
-CX     Todos van a ser variables declaradas en NASM
-DX
-EX
+A
+B
+C     Todos van a ser variables declaradas en NASM
+D
+E
 PC
 IR
 
@@ -54,3 +54,8 @@ Inician con * luego son 3 digitos (para facilitar la lectura de las instruccione
  
 
 
+
+
+
+
+juandolfo pandolfo

@@ -1,0 +1,5 @@
+*cam	B,689;
+*cam	B,66;
+*met	B;
+*sac	A;
+&
