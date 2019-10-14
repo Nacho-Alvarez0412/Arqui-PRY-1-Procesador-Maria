@@ -2,7 +2,7 @@
 ; Ignacio Alvarez Barrantes                  Arquitectura de Computadores;
 ; 2019039643                                            Esteban Arias    ;
 ; Sebastian Gamboa Bolaños                                               ;
-; 2019044679                     Proyecto #                              ;  
+; 2019044679                     Proyecto #1                              ;  
 ;                               Ensamblador                              ;  
 ;------------------------------------------------------------------------;
 
@@ -62,6 +62,7 @@ ReadInstruction:
 	je		END	
 	cmp		byte[EAX],"*" ;Determina si es instruccion
 	je		InstructionSet
+	// que pasa aqui si no hay un *, deberiamos poner como un syntax error
 	
 	
 	
@@ -131,6 +132,55 @@ InstructionSet3:
 	jmp	ReadInstruction
 
 InstructionSet4:
+	mov	EBX,EAX
+
+	;Compara con chk -> cmp
+	
+	cmp	byte[EAX],"c"
+	jne	InstructionSet5
+	inc	EAX
+	cmp	byte[EAX],"h"
+	jne	InstructionSet5
+	inc	EAX
+	cmp	byte[EAX],"k"
+	jne	InstructionSet5
+	call	Check
+	jmp	ReadInstruction
+
+InstructionSet5:
+	mov	EBX,EAX
+	
+	;Compara con cod -> shr
+
+	cmp	byte[EAX],"c"
+	jne	InstructionSet6
+	inc	EAX
+	cmp	byte[EAX],"o"
+	jne	InstructionSet6
+	inc	EAX
+	cmp	byte[EAX],"d"
+	jne	InstructionSet6
+	call	CorrerDerecha	
+	jmp	ReadInstruction
+
+InstructionSet6:
+	mov	EAX,EBX
+	
+	;Compara con coi -> shl
+
+	cmp	byte[EAX],"c"
+	jne	InstructionSet7
+	inc	EAX
+	cmp	byte[EAX],"o"
+	jne	InstructionSet7
+	inc	EAX
+	cmp	byte[EAX],"i"
+	jne	InstructionSet7
+	call	CorrerIzquierda
+	jmp	ReadInstruction
+	
+
+InstructionSet7:
 	jmp	END
 
 ;------------------------------------------------------------------------------
@@ -429,4 +479,18 @@ PrintPC:
 	PutLInt			[PC]
 	nwln
 	ret
+
+
+
+;------------------------------------------------------------------------------
+; 				 Check
+;------------------------------------------------------------------------------
+;E: 2 strings
+;S: revisa si dos valores son iguales
+;D: revisa el contenido de dos valores, y enciende flags si son iguales
+
+
+Check:
+
+	
 
