@@ -492,5 +492,163 @@ PrintPC:
 
 Check:
 
+	add			EAX,2
+	mov			EDX,0
+	mov			EDX,byte[EAX]
+	inc 		EAX
+	cmp			byte[EAX],","
+	jne			ERROR
+	inc			EAX
+	cmp 		byte[EDX],byte[EAX]		
+	ret
+
 	
+;------------------------------------------------------------------------------
+; 				 Correr Derecha
+;------------------------------------------------------------------------------
+;E: 1 valor
+;S: Realiza un shift right del valor
+;D: Realiza un shift right, y enciende o no banderas
+
+
+CorrerDerecha:
+
+	cmp			byte[EAX],"A"
+	je			IsA
+	cmp			byte[EAX],"B"
+	je			IsB
+	cmp			byte[EAX],"C"
+	je			IsC
+	cmp			byte[EAX],"D"
+	je			IsD
+	cmp			byte[EAX],"E"
+	je			IsE
+	jmp			ERROR			
+	ret
+
+
+IsA:
+	mov			EDX,0
+	mov			EDX,EAX
+	shr			EDX
+	mov			[Fa],DX
+	PutInt			[FA]
+	PutCh			"	"
+	add			EAX,2
+	ret
+
+IsB:
+	mov			EDX,0
+	mov			EDX,EAX
+	shr			EDX
+	mov			[FB],DX
+	PutInt			[FB]
+	PutCh			"	"
+	add			EAX,2
+	ret
+
+IsC:
+	mov			EDX,0
+	mov			EDX,EAX
+	shr			EDX
+	mov			[FC],DX
+	PutInt			[FC]
+	PutCh			"	"
+	add			EAX,2
+	ret
+
+IsD:
+	mov			EDX,0
+	mov			EDX,EAX
+	shr			EDX
+	mov			[FD],DX
+	PutInt			[FD]
+	PutCh			"	"
+	add			EAX,2
+	ret
+
+IsE:
+	mov			EDX,0
+	mov			EDX,EAX
+	shr			EDX
+	mov			[FE],DX
+	PutInt			[FE]
+	PutCh			"	"
+	add			EAX,2
+	ret
+
+
+;------------------------------------------------------------------------------
+; 				 Correr Izquierda
+;------------------------------------------------------------------------------
+;E: 1 valor
+;S: Realiza un shift left del valor
+;D: Realiza un shift left, y enciende o no banderas
+
+
+CorrerIzquierda:
+
+	cmp			byte[EAX],"A"
+	je			IsA2
+	cmp			byte[EAX],"B"
+	je			IsB2
+	cmp			byte[EAX],"C"
+	je			IsC2
+	cmp			byte[EAX],"D"
+	je			IsD2
+	cmp			byte[EAX],"E"
+	je			IsE2
+	jmp			ERROR			
+	ret
+
+
+IsA2:
+	mov			EDX,0
+	mov			EDX,EAX
+	shl			EDX
+	mov			[Fa],DX
+	PutInt			[FA]
+	PutCh			"	"
+	add			EAX,2
+	ret
+
+IsB2:
+	mov			EDX,0
+	mov			EDX,EAX
+	shl			EDX
+	mov			[FB],DX
+	PutInt			[FB]
+	PutCh			"	"
+	add			EAX,2
+	ret
+
+IsC2:
+	mov			EDX,0
+	mov			EDX,EAX
+	shl			EDX
+	mov			[FC],DX
+	PutInt			[FC]
+	PutCh			"	"
+	add			EAX,2
+	ret
+
+IsD2:
+	mov			EDX,0
+	mov			EDX,EAX
+	shl			EDX
+	mov			[FD],DX
+	PutInt			[FD]
+	PutCh			"	"
+	add			EAX,2
+	ret
+
+IsE2:
+	mov			EDX,0
+	mov			EDX,EAX
+	shl			EDX
+	mov			[FE],DX
+	PutInt			[FE]
+	PutCh			"	"
+	add			EAX,2
+	ret
 
