@@ -2,4 +2,8 @@
 *cam	B,66;
 *met	B;
 *sac	A;
+*cam	B,689;
+*chk	B,34;
+*cod	B;
+*coi	B;
 &

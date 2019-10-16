@@ -62,7 +62,7 @@ ReadInstruction:
 	je		END	
 	cmp		byte[EAX],"*" ;Determina si es instruccion
 	je		InstructionSet
-	// que pasa aqui si no hay un *, deberiamos poner como un syntax error
+	; que pasa aqui si no hay un *, deberiamos poner como un syntax error
 	
 	
 	
@@ -494,12 +494,12 @@ Check:
 
 	add			EAX,2
 	mov			EDX,0
-	mov			EDX,byte[EAX]
+	mov			DL,byte[EAX]
 	inc 		EAX
 	cmp			byte[EAX],","
 	jne			ERROR
 	inc			EAX
-	cmp 		byte[EDX],byte[EAX]		
+	cmp 		DL,byte[EAX]		
 	ret
 
 	
@@ -530,8 +530,8 @@ CorrerDerecha:
 IsA:
 	mov			EDX,0
 	mov			EDX,EAX
-	shr			EDX
-	mov			[Fa],DX
+	shr			EDX,1
+	mov			[FA],DX
 	PutInt			[FA]
 	PutCh			"	"
 	add			EAX,2
@@ -540,7 +540,7 @@ IsA:
 IsB:
 	mov			EDX,0
 	mov			EDX,EAX
-	shr			EDX
+	shr			EDX,1
 	mov			[FB],DX
 	PutInt			[FB]
 	PutCh			"	"
@@ -550,7 +550,7 @@ IsB:
 IsC:
 	mov			EDX,0
 	mov			EDX,EAX
-	shr			EDX
+	shr			EDX,1
 	mov			[FC],DX
 	PutInt			[FC]
 	PutCh			"	"
@@ -560,7 +560,7 @@ IsC:
 IsD:
 	mov			EDX,0
 	mov			EDX,EAX
-	shr			EDX
+	shr			EDX,1
 	mov			[FD],DX
 	PutInt			[FD]
 	PutCh			"	"
@@ -570,7 +570,7 @@ IsD:
 IsE:
 	mov			EDX,0
 	mov			EDX,EAX
-	shr			EDX
+	shr			EDX,1
 	mov			[FE],DX
 	PutInt			[FE]
 	PutCh			"	"
@@ -605,8 +605,8 @@ CorrerIzquierda:
 IsA2:
 	mov			EDX,0
 	mov			EDX,EAX
-	shl			EDX
-	mov			[Fa],DX
+	shl			EDX,1
+	mov			[FA],DX
 	PutInt			[FA]
 	PutCh			"	"
 	add			EAX,2
@@ -615,7 +615,7 @@ IsA2:
 IsB2:
 	mov			EDX,0
 	mov			EDX,EAX
-	shl			EDX
+	shl			EDX,1
 	mov			[FB],DX
 	PutInt			[FB]
 	PutCh			"	"
@@ -625,7 +625,7 @@ IsB2:
 IsC2:
 	mov			EDX,0
 	mov			EDX,EAX
-	shl			EDX
+	shl			EDX,1
 	mov			[FC],DX
 	PutInt			[FC]
 	PutCh			"	"
@@ -635,7 +635,7 @@ IsC2:
 IsD2:
 	mov			EDX,0
 	mov			EDX,EAX
-	shl			EDX
+	shl			EDX,1
 	mov			[FD],DX
 	PutInt			[FD]
 	PutCh			"	"
@@ -645,7 +645,7 @@ IsD2:
 IsE2:
 	mov			EDX,0
 	mov			EDX,EAX
-	shl			EDX
+	shl			EDX,1
 	mov			[FE],DX
 	PutInt			[FE]
 	PutCh			"	"
