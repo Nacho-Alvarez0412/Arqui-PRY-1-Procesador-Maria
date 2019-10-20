@@ -2,14 +2,14 @@
 ; Ignacio Alvarez Barrantes                  Arquitectura de Computadores;
 ; 2019039643                                            Esteban Arias    ;
 ; Sebastian Gamboa Bolaños                                               ;
-; 2019044679                     Proyecto #1                              ;  
+; 2019044679                     Proyecto #1                             ;  
 ;                               Ensamblador                              ;  
 ;------------------------------------------------------------------------;
 
 %include "io.mac"
 
 
-len EQU			1024 		;Macro textual
+len EQU			1024 	;Macro textual
 
 .DATA
 	inputMessage	db	"Digite el nombre del archivo que desea correr: ",0
@@ -62,8 +62,8 @@ ReadInstruction:
 	je		END	
 	cmp		byte[EAX],"*" ;Determina si es instruccion
 	je		InstructionSet
-	; que pasa aqui si no hay un *, deberiamos poner como un syntax error
-	
+	inc		EAX
+	jmp		ReadInstruction
 	
 	
 END:
@@ -132,7 +132,7 @@ InstructionSet3:
 	jmp	ReadInstruction
 
 InstructionSet4:
-	mov	EBX,EAX
+	mov	EAX,EBX
 
 	;Compara con chk -> cmp
 	
@@ -148,7 +148,7 @@ InstructionSet4:
 	jmp	ReadInstruction
 
 InstructionSet5:
-	mov	EBX,EAX
+	mov	EAX,EBX
 	
 	;Compara con cod -> shr
 
@@ -181,8 +181,79 @@ InstructionSet6:
 	
 
 InstructionSet7:
-	jmp	END
+	mov	EAX,EBX       ;Guarda la posicion actual en caso de no ser
+	
+	;Compara con sum -> add
 
+	cmp	byte[EAX],"s"
+	jne	InstructionSet8
+	inc	EAX
+	cmp	byte[EAX],"u"
+	jne	InstructionSet8 
+	inc	EAX
+	cmp	byte[EAX],"m"
+	jne	InstructionSet8
+	call	Sumar
+	PutLInt	[FB]
+	add	EAX,2
+	jmp	ReadInstruction
+
+
+InstructionSet8:
+	mov	EAX,EBX       ;Guarda la posicion actual en caso de no ser
+	
+	;Compara con res -> sub
+
+	cmp	byte[EAX],"r"
+	jne	InstructionSet9
+	inc	EAX
+	cmp	byte[EAX],"e"
+	jne	InstructionSet9 
+	inc	EAX
+	cmp	byte[EAX],"s"
+	jne	InstructionSet9
+	call	Restar
+	PutLInt	[FB]
+	add	EAX,2
+	jmp	ReadInstruction
+
+InstructionSet9:
+	mov	EAX,EBX       ;Guarda la posicion actual en caso de no ser
+	
+	;Compara con slt -> jmp
+
+	cmp	byte[EAX],"s"
+	jne	InstructionSet10
+	inc	EAX
+	cmp	byte[EAX],"l"
+	jne	InstructionSet10 
+	inc	EAX
+	cmp	byte[EAX],"t"
+	jne	InstructionSet10
+	add	EAX,2
+	call	Saltar
+	jmp	ReadInstruction
+
+InstructionSet10:
+	mov	EAX,EBX       ;Guarda la posicion actual en caso de no ser
+	
+	;Compara con slt -> jmp
+
+	cmp	byte[EAX],"i"
+	jne	InstructionSet11
+	inc	EAX
+	cmp	byte[EAX],"t"
+	jne	InstructionSet11 
+	inc	EAX
+	cmp	byte[EAX],"r"
+	jne	InstructionSet11
+	call	Iterar
+	jmp	ReadInstruction
+
+InstructionSet11:
+	jmp	END
+	
+     
 ;------------------------------------------------------------------------------
 ; 							File Opener
 ;------------------------------------------------------------------------------
@@ -651,4 +722,497 @@ IsE2:
 	PutCh			"	"
 	add			EAX,2
 	ret
+
+
+;------------------------------------------------------------------------------
+; 				 Sumar
+;------------------------------------------------------------------------------
+;E: 2 datos
+;S: void
+;D: suma 2 registros un valor a un registro
+
+Sumar:
+
+	add			EAX,2
+	cmp			byte[EAX],"A"
+	je			AddA
+	cmp			byte[EAX],"B"
+	je			AddB
+	cmp			byte[EAX],"C"
+	je			AddC
+	cmp			byte[EAX],"D"
+	je			AddD
+	cmp			byte[EAX],"E"
+	je			AddE
+	PutStr			error
+	jmp			END
+
+
+AddA:
+	mov			EBX,[FA]
+	push			EBX
+	add			EAX,2
+	
+	cmp			byte[EAX],"A"
+	je			AddRA
+
+	cmp			byte[EAX],"B"
+	je			AddRB
+
+	cmp			byte[EAX],"C"
+	je			AddRC
+
+	cmp			byte[EAX],"D"
+	je			AddRD
+	
+	cmp			byte[EAX],"E"
+	je			AddRE
+
+	jmp			AddNumberA
+
+AddB:
+	mov			EBX,[FB]
+	push			EBX	
+	
+	add			EAX,2
+	
+	cmp			byte[EAX],"A"
+	je			AddRA
+
+	cmp			byte[EAX],"B"
+	je			AddRB
+
+	cmp			byte[EAX],"C"
+	je			AddRC
+
+	cmp			byte[EAX],"D"
+	je			AddRD
+	
+	cmp			byte[EAX],"E"
+	je			AddRE
+	
+	jmp			AddNumberB
+
+AddC:
+	mov			EBX,[FC]
+	push			EBX
+	add			EAX,2
+	
+	cmp			byte[EAX],"A"
+	je			AddRA
+
+	cmp			byte[EAX],"B"
+	je			AddRB
+
+	cmp			byte[EAX],"C"
+	je			AddRC
+
+	cmp			byte[EAX],"D"
+	je			AddRD
+	
+	cmp			byte[EAX],"E"
+	je			AddRE
+
+	jmp			AddNumberC
+
+AddD:
+	mov			EBX,[FD]
+	push			EBX
+	add			EAX,2
+	
+	cmp			byte[EAX],"A"
+	je			AddRA
+
+	cmp			byte[EAX],"B"
+	je			AddRB
+
+	cmp			byte[EAX],"C"
+	je			AddRC
+
+	cmp			byte[EAX],"D"
+	je			AddRD
+	
+	cmp			byte[EAX],"E"
+	je			AddRE
+
+	jmp			AddNumberD
+
+AddE:
+	mov			EBX,[FE]
+	push			EBX
+	add			EAX,2
+	
+	cmp			byte[EAX],"A"
+	je			AddRA
+
+	cmp			byte[EAX],"B"
+	je			AddRB
+
+	cmp			byte[EAX],"C"
+	je			AddRC
+
+	cmp			byte[EAX],"D"
+	je			AddRD
+	
+	cmp			byte[EAX],"E"
+	je			AddRE
+
+	jmp			AddNumberE
+
+AddRA:
+	add			EBX,[FA]
+	mov			[FA],EBX
+	jmp			SumaEnd
+
+AddRB:
+	add			EBX,[FB]
+	mov			[FB],EBX
+	jmp			SumaEnd
+
+AddRC:
+	add			EBX,[FC]
+	mov			[FC],EBX
+	jmp			SumaEnd
+
+
+AddRD:
+	add			EBX,[FD]
+	mov			[FD],EBX
+	jmp			SumaEnd
+
+
+AddRE:
+	add			EBX,[FE]
+	mov			[FE],EBX
+	jmp			SumaEnd
+
+AddNumberA:
+	mov			ECX,0
+	call			GetNumber
+	pop			EBX
+	add			EBX,ECX
+	mov			[FA],EBX
+	jmp			SumaEnd
+
+AddNumberB:
+	mov			ECX,0
+	call			GetNumber
+	pop			EBX
+
+	add			EBX,ECX
+	mov			[FB],EBX
+
+	jmp			SumaEnd
+
+AddNumberC:
+	mov			ECX,0
+	call			GetNumber
+	pop			EBX
+
+	add			EBX,ECX
+	mov			[FC],EBX
+	jmp			SumaEnd
+
+AddNumberD:
+	mov			ECX,0
+	call			GetNumber
+	pop			EBX
+
+	add			EBX,ECX
+	mov			[FD],EBX
+	jmp			SumaEnd
+
+AddNumberE:
+	mov			ECX,0
+	call			GetNumber
+	pop			EBX
+
+	add			EBX,ECX
+	mov			[FE],EBX
+	jmp			SumaEnd
+
+SumaEnd:
+	ret
+
+
+
+;------------------------------------------------------------------------------
+; 				 Restar
+;------------------------------------------------------------------------------
+;E: 2 datos
+;S: void
+;D: suma 2 registros un valor a un registro
+
+Restar:
+
+	add			EAX,2
+	cmp			byte[EAX],"A"
+	je			RestarA
+	cmp			byte[EAX],"B"
+	je			RestarB
+	cmp			byte[EAX],"C"
+	je			RestarC
+	cmp			byte[EAX],"D"
+	je			RestarD
+	cmp			byte[EAX],"E"
+	je			RestarE
+	PutStr			error
+	jmp			END
+
+
+RestarA:
+	mov			EBX,[FA]
+	push			EBX
+	add			EAX,2
+	
+	cmp			byte[EAX],"A"
+	je			RestarRA
+
+	cmp			byte[EAX],"B"
+	je			RestarRB
+
+	cmp			byte[EAX],"C"
+	je			RestarRC
+
+	cmp			byte[EAX],"D"
+	je			RestarRD
+	
+	cmp			byte[EAX],"E"
+	je			RestarRE
+
+	jmp			RestarNumberA
+
+RestarB:
+	mov			EBX,[FB]
+	push			EBX	
+	
+	add			EAX,2
+	
+	cmp			byte[EAX],"A"
+	je			RestarRA
+
+	cmp			byte[EAX],"B"
+	je			RestarRB
+
+	cmp			byte[EAX],"C"
+	je			RestarRC
+
+	cmp			byte[EAX],"D"
+	je			RestarRD
+	
+	cmp			byte[EAX],"E"
+	je			RestarRE
+	
+	jmp			RestarNumberB
+
+RestarC:
+	mov			EBX,[FC]
+	push			EBX
+	add			EAX,2
+	
+	cmp			byte[EAX],"A"
+	je			RestarRA
+
+	cmp			byte[EAX],"B"
+	je			RestarRB
+
+	cmp			byte[EAX],"C"
+	je			RestarRC
+
+	cmp			byte[EAX],"D"
+	je			RestarRD
+	
+	cmp			byte[EAX],"E"
+	je			RestarRE
+
+	jmp			RestarNumberC
+
+RestarD:
+	mov			EBX,[FD]
+	push			EBX
+	add			EAX,2
+	
+	cmp			byte[EAX],"A"
+	je			RestarRA
+
+	cmp			byte[EAX],"B"
+	je			RestarRB
+
+	cmp			byte[EAX],"C"
+	je			RestarRC
+
+	cmp			byte[EAX],"D"
+	je			RestarRD
+	
+	cmp			byte[EAX],"E"
+	je			RestarRE
+
+	jmp			RestarNumberD
+
+RestarE:
+	mov			EBX,[FE]
+	push			EBX
+	add			EAX,2
+	
+	cmp			byte[EAX],"A"
+	je			RestarRA
+
+	cmp			byte[EAX],"B"
+	je			RestarRB
+
+	cmp			byte[EAX],"C"
+	je			RestarRC
+
+	cmp			byte[EAX],"D"
+	je			RestarRD
+	
+	cmp			byte[EAX],"E"
+	je			RestarRE
+
+	jmp			RestarNumberE
+
+RestarRA:
+	sub			EBX,[FA]
+	mov			[FA],EBX
+	jmp			RestaEnd
+
+RestarRB:
+	sub			EBX,[FB]
+	mov			[FB],EBX
+	jmp			RestaEnd
+
+RestarRC:
+	add			EBX,[FC]
+	mov			[FC],EBX
+	jmp			RestaEnd
+
+
+RestarRD:
+	add			EBX,[FD]
+	mov			[FD],EBX
+	jmp			RestaEnd
+
+
+RestarRE:
+	add			EBX,[FE]
+	mov			[FE],EBX
+	jmp			RestaEnd
+
+RestarNumberA:
+	mov			ECX,0
+	call			GetNumber
+	pop			EBX
+	sub			EBX,ECX
+	mov			[FA],EBX
+	jmp			RestaEnd
+
+RestarNumberB:
+	mov			ECX,0
+	call			GetNumber
+	pop			EBX
+
+	sub			EBX,ECX
+	mov			[FB],EBX
+
+	jmp			RestaEnd
+
+RestarNumberC:
+	mov			ECX,0
+	call			GetNumber
+	pop			EBX
+
+	sub			EBX,ECX
+	mov			[FC],EBX
+	jmp			RestaEnd
+
+RestarNumberD:
+	mov			ECX,0
+	call			GetNumber
+	pop			EBX
+
+	sub			EBX,ECX
+	mov			[FD],EBX
+	jmp			RestaEnd
+
+RestarNumberE:
+	mov			ECX,0
+	call			GetNumber
+	pop			EBX
+
+	sub			EBX,ECX
+	mov			[FE],EBX
+	jmp			RestaEnd
+
+RestaEnd:
+	ret
+
+
+;------------------------------------------------------------------------------
+; 					Saltar
+;------------------------------------------------------------------------------
+;E: void
+;S: void
+;D: Salta a una etiqueta 
+
+Saltar:
+	mov		EDX,buffer    ;Coloca un puntero al inicio del programa
+	
+
+FindLabel:
+	cmp		byte[EDX],"!"
+	je		IsLabel
+	inc		EDX
+	jmp		FindLabel
+
+IsLabel:
+	inc		EDX
+	mov		BL,byte[EAX]
+	cmp		byte[EDX],BL
+	je		Match
+	jmp		FindLabel
+
+Match:
+	mov		EAX,EDX
+
+NextInstruction:
+	cmp		byte[EAX],"*"
+	je		LabelFound
+	inc		EAX
+	jmp		NextInstruction
+
+LabelFound:
+	ret
+
+
+;------------------------------------------------------------------------------
+; 					Saltar
+;------------------------------------------------------------------------------
+;E: void
+;S: void
+;D: Salta a una etiqueta mientras ECX sea diferente a 0
+
+
+Iterar:
+	mov		ECX,[FC]
+	cmp		ECX,0		;Verifica si debe seguir repitiendo
+	je		LoopDone
+	sub		ECX,1
+	mov		[FC],ECX
+	add		EAX,2
+	call		Saltar
+	ret
+
+LoopDone:
+	ret
+
+
+	
+	
+	
+
+
+
+	
+
+			
 

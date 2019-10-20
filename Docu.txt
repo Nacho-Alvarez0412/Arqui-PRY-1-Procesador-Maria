@@ -35,21 +35,24 @@ Instrucciones:
 
 Inician con * luego son 3 digitos (para facilitar la lectura de las instrucciones)
 
- mov = *cam (cambiar)
- loop = *itr(iterar)
- push= *met(meter)
- pop = *sac(sacar)
- cmp = *chk(check)
+ //mov = *cam (cambiar)
+ //loop = *itr(iterar)
+ //push= *met(meter)
+ //pop = *sac(sacar)
+ //cmp = *chk(check)
  rol = *roi(rotar izquierda)
  ror = *rod(rotar derecha)
- shr = *cod (correr derecha)
- shl = *coi(correr izquierda)
+ //shr = *cod (correr derecha)
+ //shl = *coi(correr izquierda)
  test = *prb(prueba)
  and = *gem(gemelitos)
+ //jmp = *slt(saltar)
  je = *sgm(saltar si gemelitos)
  jne = *sng(saltar no gemelitos)
  jz = *sco(saltar cero)
  jnz = *snc(saltar no cero)
+ //add = *sum(sumar)
+ //sub = *res(restar)
 
  
 

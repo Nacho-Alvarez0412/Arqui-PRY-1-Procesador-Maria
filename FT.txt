@@ -1,9 +1,14 @@
 *cam	B,689;
 *cam	B,66;
 *met	B;
-*sac	A;
-*cam	B,689;
-*chk	B,34;
-*cod	B;
-*coi	B;
+*cam	C,1;
+*sum	B,2;
+*sum	B,4000;
+!A-Resta!
+*res	B,12;
+*res	B,1000;
+*itr	A-Resta
 &
+
+
+
