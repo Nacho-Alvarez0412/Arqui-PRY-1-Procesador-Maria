@@ -237,7 +237,7 @@ InstructionSet9:
 InstructionSet10:
 	mov	EAX,EBX       ;Guarda la posicion actual en caso de no ser
 	
-	;Compara con slt -> jmp
+	;Compara con itr -> loop
 
 	cmp	byte[EAX],"i"
 	jne	InstructionSet11
@@ -250,7 +250,78 @@ InstructionSet10:
 	call	Iterar
 	jmp	ReadInstruction
 
+
 InstructionSet11:
+	mov	EAX,EBX       ;Guarda la posicion actual en caso de no ser
+	
+	;Compara con rod -> ror
+
+	cmp	byte[EAX],"r"
+	jne	InstructionSet12
+	inc	EAX
+	cmp	byte[EAX],"o"
+	jne	InstructionSet12
+	inc	EAX
+	cmp	byte[EAX],"d"
+	jne	InstructionSet12
+	call	rotarDerecha
+	jmp	ReadInstruction
+
+
+InstructionSet12:
+	mov	EAX,EBX       ;Guarda la posicion actual en caso de no ser
+	
+	;Compara con roi -> rol
+
+	cmp	byte[EAX],"r"
+	jne	InstructionSet13
+	inc	EAX
+	cmp	byte[EAX],"o"
+	jne	InstructionSet13
+	inc	EAX
+	cmp	byte[EAX],"i"
+	jne	InstructionSet3
+	call	rotarIzquierda
+	jmp	ReadInstruction
+
+
+
+InstructionSet13:
+	mov	EAX,EBX       ;Guarda la posicion actual en caso de no ser
+	
+	;Compara con prb -> test
+
+	cmp	byte[EAX],"p"
+	jne	InstructionSet14
+	inc	EAX
+	cmp	byte[EAX],"r"
+	jne	InstructionSet14 
+	inc	EAX
+	cmp	byte[EAX],"b"
+	jne	InstructionSet14
+	call	Probar
+	jmp	ReadInstruction
+
+
+
+
+InstructionSet14:
+	mov	EAX,EBX       ;Guarda la posicion actual en caso de no ser
+	
+	;Compara con gem -> and
+
+	cmp	byte[EAX],"g"
+	jne	InstructionSet15
+	inc	EAX
+	cmp	byte[EAX],"e"
+	jne	InstructionSet15 
+	inc	EAX
+	cmp	byte[EAX],"m"
+	jne	InstructionSet15
+	call	Gemelitos
+	jmp	ReadInstruction
+
+InstructionSet15:
 	jmp	END
 	
      
@@ -1185,7 +1256,7 @@ LabelFound:
 
 
 ;------------------------------------------------------------------------------
-; 					Saltar
+; 					loop
 ;------------------------------------------------------------------------------
 ;E: void
 ;S: void
@@ -1199,7 +1270,7 @@ Iterar:
 	sub		ECX,1
 	mov		[FC],ECX
 	add		EAX,2
-	call		Saltar
+	call	Saltar
 	ret
 
 LoopDone:
@@ -1207,12 +1278,197 @@ LoopDone:
 
 
 	
+;------------------------------------------------------------------------------
+; 					Rotate right
+;------------------------------------------------------------------------------
+;E: 1 valor
+;S: void
+;D: Rota un numero a la derecha
 	
-	
+
+rotarDerecha:
+
+	cmp			byte[EAX],"A"
+	je			IsA3
+	cmp			byte[EAX],"B"
+	je			IsB3
+	cmp			byte[EAX],"C"
+	je			IsC3
+	cmp			byte[EAX],"D"
+	je			IsD3
+	cmp			byte[EAX],"E"
+	je			IsE3
+	jmp			ERROR			
+	ret
+
+
+IsA3:
+	mov			EDX,0
+	mov			EDX,EAX
+	ror			EDX,1
+	mov			[FA],DX
+	PutInt			[FA]
+	PutCh			"	"
+	add			EAX,2
+	ret
+
+IsB3:
+	mov			EDX,0
+	mov			EDX,EAX
+	ror			EDX,1
+	mov			[FB],DX
+	PutInt			[FB]
+	PutCh			"	"
+	add			EAX,2
+	ret
+
+IsC3:
+	mov			EDX,0
+	mov			EDX,EAX
+	ror			EDX,1
+	mov			[FC],DX
+	PutInt			[FC]
+	PutCh			"	"
+	add			EAX,2
+	ret
+
+IsD3:
+	mov			EDX,0
+	mov			EDX,EAX
+	ror			EDX,1
+	mov			[FD],DX
+	PutInt			[FD]
+	PutCh			"	"
+	add			EAX,2
+	ret
+
+IsE3:
+	mov			EDX,0
+	mov			EDX,EAX
+	ror			EDX,1
+	mov			[FE],DX
+	PutInt			[FE]
+	PutCh			"	"
+	add			EAX,2
+	ret
 
 
 
+;------------------------------------------------------------------------------
+; 					Rotate left
+;------------------------------------------------------------------------------
+;E: 1 valor
+;S: void
+;D: Rota un numero a la izquierda
 	
+
+rotarIzquierda:
+
+	cmp			byte[EAX],"A"
+	je			IsA4
+	cmp			byte[EAX],"B"
+	je			IsB4
+	cmp			byte[EAX],"C"
+	je			IsC4
+	cmp			byte[EAX],"D"
+	je			IsD4
+	cmp			byte[EAX],"E"
+	je			IsE4
+	jmp			ERROR			
+	ret
+
+
+IsA4:
+	mov			EDX,0
+	mov			EDX,EAX
+	rol			EDX,1
+	mov			[FA],DX
+	PutInt			[FA]
+	PutCh			"	"
+	add			EAX,2
+	ret
+
+IsB4:
+	mov			EDX,0
+	mov			EDX,EAX
+	rol			EDX,1
+	mov			[FB],DX
+	PutInt			[FB]
+	PutCh			"	"
+	add			EAX,2
+	ret
+
+IsC4:
+	mov			EDX,0
+	mov			EDX,EAX
+	rol			EDX,1
+	mov			[FC],DX
+	PutInt			[FC]
+	PutCh			"	"
+	add			EAX,2
+	ret
+
+IsD4:
+	mov			EDX,0
+	mov			EDX,EAX
+	rol			EDX,1
+	mov			[FD],DX
+	PutInt			[FD]
+	PutCh			"	"
+	add			EAX,2
+	ret
+
+IsE4:
+	mov			EDX,0
+	mov			EDX,EAX
+	rol			EDX,1
+	mov			[FE],DX
+	PutInt			[FE]
+	PutCh			"	"
+	add			EAX,2
+	ret
 
 			
 
+;------------------------------------------------------------------------------
+; 				 Test
+;------------------------------------------------------------------------------
+;E: 2 strings
+;S: revisa si ciertos bits son iguales
+;D: revisa el contenido de dos valores, y enciende flags si son los bits iguales
+
+
+Probar:
+
+	add			EAX,2
+	mov			EDX,0
+	mov			DL,byte[EAX]
+	inc 		EAX
+	cmp			byte[EAX],","
+	jne			ERROR
+	inc			EAX
+	test 		DL,byte[EAX]		
+	ret
+
+
+
+
+;------------------------------------------------------------------------------
+; 				 And
+;------------------------------------------------------------------------------
+;E: 2 strings
+;S: revisa si dos valores son iguales
+;D: revisa el contenido de dos valores, y enciende flags si son iguales
+
+
+Gemelitos:
+
+	add			EAX,2
+	mov			EDX,0
+	mov			DL,byte[EAX]
+	inc 		EAX
+	cmp			byte[EAX],","
+	jne			ERROR
+	inc			EAX
+	and 		DL,byte[EAX]		
+	ret

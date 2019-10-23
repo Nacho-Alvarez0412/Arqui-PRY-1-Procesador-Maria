@@ -4,6 +4,10 @@
 *cam	C,1;
 *sum	B,2;
 *sum	B,4000;
+*rod	B;
+*roi	B;
+*prb	B,C;
+*gem	B,C;
 !A-Resta!
 *res	B,12;
 *res	B,1000;
