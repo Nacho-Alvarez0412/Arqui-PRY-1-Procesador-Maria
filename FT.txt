@@ -1,12 +1,16 @@
 *cam	B,689;
 *cam	B,66;
 *met	B;
-*cam	C,1;
+*cam	C,66;
+*chk	B,C;
+*sgm	A-Resta;
 *sum	B,2;
 *sum	B,4000;
 *rod	B;
 *roi	B;
+*cam	B,1;
 *prb	B,C;
+*snc	A-Resta;
 *gem	B,C;
 !A-Resta!
 *res	B,12;

@@ -16,7 +16,7 @@ IR
 
 Stack:
 
-Vamos a utilizar el estack de NASM
+Vamos a utilizar el stack de NASM
 
 
 Banderas:
@@ -47,19 +47,13 @@ Inician con * luego son 3 digitos (para facilitar la lectura de las instruccione
  //test = *prb(prueba)
  //and = *gem(gemelitos)
  //jmp = *slt(saltar)
- je = *sgm(saltar si gemelitos)
- jne = *sng(saltar no gemelitos)
- jz = *sco(saltar cero)
- jnz = *snc(saltar no cero)
+ //je = *sgm(saltar si gemelitos)
+ //jne = *sng(saltar no gemelitos)
+ //jz = *sco(saltar cero)
+ //jnz = *snc(saltar no cero)
  //add = *sum(sumar)
  //sub = *res(restar)
 
  
 
 
-
-
-
-
-juandolfo pandolfo
-Pinche bato wey no manches

@@ -31,6 +31,9 @@ len EQU			1024 	;Macro textual
 	FC			resb	4
 	FD			resb	4
 	FE			resb	4
+	ZF			resb	4
+	OF			resb	4
+	CF			resb	4
 
 section .bss
 	descriptor		resb	8
@@ -322,6 +325,72 @@ InstructionSet14:
 	jmp	ReadInstruction
 
 InstructionSet15:
+	mov	EAX,EBX       ;Guarda la posicion actual en caso de no ser
+	
+	;Compara con sgm -> je
+
+	cmp	byte[EAX],"s"
+	jne	InstructionSet16
+	inc	EAX
+	cmp	byte[EAX],"g"
+	jne	InstructionSet16
+	inc	EAX
+	cmp	byte[EAX],"m"
+	jne	InstructionSet16
+	call	saltarGemelos
+	jmp	ReadInstruction
+
+InstructionSet16:
+	mov	EAX,EBX       ;Guarda la posicion actual en caso de no ser
+	
+	;Compara con sng -> jne
+
+	cmp	byte[EAX],"s"
+	jne	InstructionSet17
+	inc	EAX
+	cmp	byte[EAX],"n"
+	jne	InstructionSet17 
+	inc	EAX
+	cmp	byte[EAX],"g"
+	jne	InstructionSet17
+	call	saltarNoGemelos
+	jmp	ReadInstruction
+
+
+InstructionSet17:
+	mov	EAX,EBX       ;Guarda la posicion actual en caso de no ser
+	
+	;Compara con sco -> jz
+
+	cmp	byte[EAX],"s"
+	jne	InstructionSet18
+	inc	EAX
+	cmp	byte[EAX],"c"
+	jne	InstructionSet18
+	inc	EAX
+	cmp	byte[EAX],"o"
+	jne	InstructionSet18
+	call	Gemelitos
+	jmp	ReadInstruction
+
+
+InstructionSet18:
+	mov	EAX,EBX       ;Guarda la posicion actual en caso de no ser
+	
+	;Compara con snc -> jnz
+
+	cmp	byte[EAX],"s"
+	jne	InstructionSet19
+	inc	EAX
+	cmp	byte[EAX],"n"
+	jne	InstructionSet19 
+	inc	EAX
+	cmp	byte[EAX],"c"
+	jne	InstructionSet19
+	call	saltarNoCero
+	jmp	ReadInstruction
+
+InstructionSet19:
 	jmp	END
 	
      
@@ -641,7 +710,13 @@ Check:
 	cmp			byte[EAX],","
 	jne			ERROR
 	inc			EAX
-	cmp 		DL,byte[EAX]		
+	cmp 		DL,byte[EAX]
+	je			changeFlag3	
+	mov 		ZF,0	
+	ret
+
+changeFlag3:
+	mov ZF,1
 	ret
 
 	
@@ -1447,7 +1522,13 @@ Probar:
 	cmp			byte[EAX],","
 	jne			ERROR
 	inc			EAX
-	test 		DL,byte[EAX]		
+	test 		DL,byte[EAX]
+	je			changeFlag2	
+	mov 		ZF,0	
+	ret
+
+changeFlag2:
+	mov ZF,1
 	ret
 
 
@@ -1470,5 +1551,74 @@ Gemelitos:
 	cmp			byte[EAX],","
 	jne			ERROR
 	inc			EAX
-	and 		DL,byte[EAX]		
+	and 		DL,byte[EAX]
+	je			changeFlag	
+	mov 		ZF,0	
+	ret
+
+changeFlag:
+	mov ZF,1
+	ret
+
+
+
+
+
+;------------------------------------------------------------------------------
+; 				 Jump if Equal
+;------------------------------------------------------------------------------
+;E: 
+;S: 
+;D: salta si son iguales
+
+
+saltarGemelos:
+
+	je		Saltar	
+	ret
+
+
+
+;------------------------------------------------------------------------------
+; 				 Jump if not Equal
+;------------------------------------------------------------------------------
+;E: 
+;S: 
+;D: salta si no son iguales
+
+
+saltarNoGemelos:
+
+	jne		Saltar	
+	ret
+
+
+
+;------------------------------------------------------------------------------
+; 				 Jump if zero
+;------------------------------------------------------------------------------
+;E: 
+;S: 
+;D: salta si son iguales
+
+
+saltarCero:
+
+	
+	jz		Saltar	
+	ret
+
+
+
+;------------------------------------------------------------------------------
+; 				 Jump if not zero
+;------------------------------------------------------------------------------
+;E: 
+;S: 
+;D: salta si no son iguales
+
+
+saltarNoCero:
+
+	jnz		Saltar	
 	ret
