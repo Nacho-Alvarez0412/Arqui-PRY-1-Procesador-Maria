@@ -710,14 +710,10 @@ Check:
 	cmp			byte[EAX],","
 	jne			ERROR
 	inc			EAX
-	cmp 		DL,byte[EAX]
-	je			changeFlag3	
-	mov 		ZF,0	
+	cmp 		DL,byte[EAX]	
 	ret
 
-changeFlag3:
-	mov ZF,1
-	ret
+
 
 	
 ;------------------------------------------------------------------------------
@@ -1522,13 +1518,7 @@ Probar:
 	cmp			byte[EAX],","
 	jne			ERROR
 	inc			EAX
-	test 		DL,byte[EAX]
-	je			changeFlag2	
-	mov 		ZF,0	
-	ret
-
-changeFlag2:
-	mov ZF,1
+	test 		DL,byte[EAX]	
 	ret
 
 
@@ -1551,13 +1541,7 @@ Gemelitos:
 	cmp			byte[EAX],","
 	jne			ERROR
 	inc			EAX
-	and 		DL,byte[EAX]
-	je			changeFlag	
-	mov 		ZF,0	
-	ret
-
-changeFlag:
-	mov ZF,1
+	and 		DL,byte[EAX]	
 	ret
 
 
