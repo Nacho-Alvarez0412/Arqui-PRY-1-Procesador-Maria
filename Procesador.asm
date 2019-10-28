@@ -13,15 +13,26 @@ len EQU			1024 	;Macro textual
 
 .DATA
 	inputMessage	db	"Digite el nombre del archivo que desea correr: ",0
-	pcTitle		db	"PC: ",0
-	irTitle		db	"IR: ",0
+	PCPrint		db	"PC: ",0
+	IRPrint		db	"IR: ",0
 	error		db	"Error de syntax",0
-	
-
+	waitMessage	db	"Digite cualquier tecla para continuar el proceso",0
 	invalidMessage	db	"El archivo ingresado no es reconocido por el programa",0	
+	printA		db	"A: ",0
+	printB		db	"B: ",0
+	printC		db	"C: ",0
+	printD		db	"D: ",0
+	printE		db	"E: ",0
+	flags		db	"Flags: ",0
+	printSF		db	"SF: ",0
+	printZF		db	"ZF: ",0 
+	printAF		db	"AF: ",0
+	printPF		db	"PF: ",0
+	printCF		db	"CF: ",0
 
 
 .UDATA
+	trash			resb	1
 	file			resb	50
 	content			resb	1024
 	IR			resb	5
@@ -31,9 +42,10 @@ len EQU			1024 	;Macro textual
 	FC			resb	4
 	FD			resb	4
 	FE			resb	4
-	ZF			resb	4
-	OF			resb	4
-	CF			resb	4
+	SF			resb	1
+	ZF			resb	1
+	CF			resb	1
+	PF			resb	1
 
 section .bss
 	descriptor		resb	8
@@ -57,12 +69,9 @@ section .bss
 	;Identifica instruccion
 
 ReadInstruction:
-	mov		EDX,[PC]
-	inc		EDX
-	mov		[PC],EDX
-	call		PrintPC
 	cmp		byte[EAX],"&" ;El programa termino
-	je		END	
+	je		END
+	
 	cmp		byte[EAX],"*" ;Determina si es instruccion
 	je		InstructionSet
 	inc		EAX
@@ -83,6 +92,20 @@ END:
 	.EXIT
 
 InstructionSet:
+	mov		EDX,[PC]
+	inc		EDX
+	mov		[PC],EDX
+	;Realiza ejecucion paso por paso
+
+	;--------------------------------
+	PutStr		waitMessage
+	GetStr		trash
+	nwln
+	;--------------------------------
+
+	mov		EDX,EAX
+	call		PrintInstructionSet
+
 	inc	EAX
 	mov	EBX,EAX
 
@@ -197,7 +220,6 @@ InstructionSet7:
 	cmp	byte[EAX],"m"
 	jne	InstructionSet8
 	call	Sumar
-	PutLInt	[FB]
 	add	EAX,2
 	jmp	ReadInstruction
 
@@ -216,7 +238,7 @@ InstructionSet8:
 	cmp	byte[EAX],"s"
 	jne	InstructionSet9
 	call	Restar
-	PutLInt	[FB]
+
 	add	EAX,2
 	jmp	ReadInstruction
 
@@ -451,8 +473,7 @@ IsRegisterA:
 	mov			ECX,0
 	call			GetNumber
 	mov			[FA],CX
-	PutInt			[FA]
-	PutCh			"	"
+
 	add			EAX,2		
 	jmp			ReadInstruction
 
@@ -465,8 +486,7 @@ IsRegisterB:
 	mov			ECX,0
 	call			GetNumber
 	mov			[FB],CX
-	PutInt			[FB]
-	PutCh			"	"
+	
 	add			EAX,2
 	jmp			ReadInstruction
 
@@ -479,8 +499,7 @@ IsRegisterC:
 	mov			ECX,0
 	call			GetNumber
 	mov			[FC],CX
-	PutInt			[FC]
-	PutCh			"	"
+	
 	add			EAX,2
 	jmp			ReadInstruction
 
@@ -493,8 +512,7 @@ IsRegisterD:
 	mov			ECX,0
 	call			GetNumber
 	mov			[FD],CX
-	PutInt			[FD]
-	PutCh			"	"
+	
 	add			EAX,2
 	jmp			ReadInstruction
 
@@ -507,8 +525,7 @@ IsRegisterE:
 	mov			ECX,0
 	call			GetNumber
 	mov			[FE],CX
-	PutInt			[FE]
-	PutCh			"	"
+	
 	add			EAX,2
 	jmp			ReadInstruction
 
@@ -677,22 +694,6 @@ sacarE:
 	ret
 
 
-
-;------------------------------------------------------------------------------
-; 				 Print PC
-;------------------------------------------------------------------------------
-;E: void
-;S: void
-;D: imprime el pc
-
-PrintPC:
-	PutStr			pcTitle
-	PutLInt			[PC]
-	nwln
-	ret
-
-
-
 ;------------------------------------------------------------------------------
 ; 				 Check
 ;------------------------------------------------------------------------------
@@ -706,16 +707,21 @@ Check:
 	add			EAX,2
 	mov			EDX,0
 	mov			DL,byte[EAX]
-	inc 		EAX
+	inc 			EAX
 	cmp			byte[EAX],","
 	jne			ERROR
 	inc			EAX
-	cmp 		DL,byte[EAX]	
+	cmp 		DL,byte[EAX]
+	je		Set0Flag
+	mov		byte[ZF],0
+	mov		byte[SF],1
 	ret
 
+Set0Flag:
+	mov	byte[ZF],1
+	mov	byte[SF],0
+	ret
 
-
-	
 ;------------------------------------------------------------------------------
 ; 				 Correr Derecha
 ;------------------------------------------------------------------------------
@@ -745,8 +751,7 @@ IsA:
 	mov			EDX,EAX
 	shr			EDX,1
 	mov			[FA],DX
-	PutInt			[FA]
-	PutCh			"	"
+	
 	add			EAX,2
 	ret
 
@@ -755,8 +760,7 @@ IsB:
 	mov			EDX,EAX
 	shr			EDX,1
 	mov			[FB],DX
-	PutInt			[FB]
-	PutCh			"	"
+	
 	add			EAX,2
 	ret
 
@@ -765,8 +769,7 @@ IsC:
 	mov			EDX,EAX
 	shr			EDX,1
 	mov			[FC],DX
-	PutInt			[FC]
-	PutCh			"	"
+	
 	add			EAX,2
 	ret
 
@@ -775,8 +778,7 @@ IsD:
 	mov			EDX,EAX
 	shr			EDX,1
 	mov			[FD],DX
-	PutInt			[FD]
-	PutCh			"	"
+	
 	add			EAX,2
 	ret
 
@@ -785,8 +787,7 @@ IsE:
 	mov			EDX,EAX
 	shr			EDX,1
 	mov			[FE],DX
-	PutInt			[FE]
-	PutCh			"	"
+	
 	add			EAX,2
 	ret
 
@@ -820,8 +821,7 @@ IsA2:
 	mov			EDX,EAX
 	shl			EDX,1
 	mov			[FA],DX
-	PutInt			[FA]
-	PutCh			"	"
+	
 	add			EAX,2
 	ret
 
@@ -830,8 +830,7 @@ IsB2:
 	mov			EDX,EAX
 	shl			EDX,1
 	mov			[FB],DX
-	PutInt			[FB]
-	PutCh			"	"
+	
 	add			EAX,2
 	ret
 
@@ -840,8 +839,7 @@ IsC2:
 	mov			EDX,EAX
 	shl			EDX,1
 	mov			[FC],DX
-	PutInt			[FC]
-	PutCh			"	"
+	
 	add			EAX,2
 	ret
 
@@ -850,8 +848,7 @@ IsD2:
 	mov			EDX,EAX
 	shl			EDX,1
 	mov			[FD],DX
-	PutInt			[FD]
-	PutCh			"	"
+	
 	add			EAX,2
 	ret
 
@@ -860,8 +857,7 @@ IsE2:
 	mov			EDX,EAX
 	shl			EDX,1
 	mov			[FE],DX
-	PutInt			[FE]
-	PutCh			"	"
+	
 	add			EAX,2
 	ret
 
@@ -1378,8 +1374,7 @@ IsA3:
 	mov			EDX,EAX
 	ror			EDX,1
 	mov			[FA],DX
-	PutInt			[FA]
-	PutCh			"	"
+	
 	add			EAX,2
 	ret
 
@@ -1388,8 +1383,7 @@ IsB3:
 	mov			EDX,EAX
 	ror			EDX,1
 	mov			[FB],DX
-	PutInt			[FB]
-	PutCh			"	"
+	
 	add			EAX,2
 	ret
 
@@ -1398,8 +1392,7 @@ IsC3:
 	mov			EDX,EAX
 	ror			EDX,1
 	mov			[FC],DX
-	PutInt			[FC]
-	PutCh			"	"
+	
 	add			EAX,2
 	ret
 
@@ -1408,8 +1401,7 @@ IsD3:
 	mov			EDX,EAX
 	ror			EDX,1
 	mov			[FD],DX
-	PutInt			[FD]
-	PutCh			"	"
+	
 	add			EAX,2
 	ret
 
@@ -1418,8 +1410,7 @@ IsE3:
 	mov			EDX,EAX
 	ror			EDX,1
 	mov			[FE],DX
-	PutInt			[FE]
-	PutCh			"	"
+	
 	add			EAX,2
 	ret
 
@@ -1454,8 +1445,7 @@ IsA4:
 	mov			EDX,EAX
 	rol			EDX,1
 	mov			[FA],DX
-	PutInt			[FA]
-	PutCh			"	"
+	
 	add			EAX,2
 	ret
 
@@ -1464,8 +1454,7 @@ IsB4:
 	mov			EDX,EAX
 	rol			EDX,1
 	mov			[FB],DX
-	PutInt			[FB]
-	PutCh			"	"
+	
 	add			EAX,2
 	ret
 
@@ -1474,8 +1463,7 @@ IsC4:
 	mov			EDX,EAX
 	rol			EDX,1
 	mov			[FC],DX
-	PutInt			[FC]
-	PutCh			"	"
+	
 	add			EAX,2
 	ret
 
@@ -1484,8 +1472,7 @@ IsD4:
 	mov			EDX,EAX
 	rol			EDX,1
 	mov			[FD],DX
-	PutInt			[FD]
-	PutCh			"	"
+	
 	add			EAX,2
 	ret
 
@@ -1494,8 +1481,7 @@ IsE4:
 	mov			EDX,EAX
 	rol			EDX,1
 	mov			[FE],DX
-	PutInt			[FE]
-	PutCh			"	"
+	
 	add			EAX,2
 	ret
 
@@ -1518,7 +1504,15 @@ Probar:
 	cmp			byte[EAX],","
 	jne			ERROR
 	inc			EAX
-	test 		DL,byte[EAX]	
+	test 		DL,byte[EAX]
+	je		Set0FlagTest
+	mov		byte[ZF],0
+	mov		byte[SF],1	
+	ret
+
+Set0FlagTest:
+	mov	byte[ZF],1
+	mov	byte[SF],0
 	ret
 
 
@@ -1542,6 +1536,14 @@ Gemelitos:
 	jne			ERROR
 	inc			EAX
 	and 		DL,byte[EAX]	
+	je		Set0FlagAnd
+	mov		byte[ZF],0
+	mov		byte[SF],1	
+	ret
+
+Set0FlagAnd:
+	mov	byte[ZF],1
+	mov	byte[SF],0
 	ret
 
 
@@ -1557,8 +1559,11 @@ Gemelitos:
 
 
 saltarGemelos:
+	je		CallSaltar	
+	ret
 
-	je		Saltar	
+CallSaltar:
+	call		Saltar
 	ret
 
 
@@ -1573,7 +1578,11 @@ saltarGemelos:
 
 saltarNoGemelos:
 
-	jne		Saltar	
+	jne		CallNoSaltar	
+	ret
+
+CallNoSaltar:
+	call		Saltar
 	ret
 
 
@@ -1589,7 +1598,11 @@ saltarNoGemelos:
 saltarCero:
 
 	
-	jz		Saltar	
+	jz		Call0Saltar	
+	ret
+
+Call0Saltar:
+	call		Saltar
 	ret
 
 
@@ -1604,5 +1617,149 @@ saltarCero:
 
 saltarNoCero:
 
-	jnz		Saltar	
+	jnz		Call0NoSaltar	
 	ret
+
+Call0NoSaltar:
+	call		Saltar
+	ret
+
+;------------------------------------------------------------------------------
+; 				 Print InstructionSet
+;------------------------------------------------------------------------------
+;E: 
+;S: 
+;D: imprime los datos del Programa
+
+PrintInstructionSet:
+	
+	PutStr		PCPrint
+	PutLInt		[PC]
+	PutCh		"	"
+	PutStr		IRPrint
+	inc		EDX
+	PutCh		byte[EDX]
+	inc		EDX
+	PutCh		byte[EDX]
+	inc		EDX
+	PutCh		byte[EDX]
+	add		EDX,2
+	PutCh		"	"
+	cmp		byte[EDX],"*"
+	jne		Parametro1
+	
+
+	ret
+
+Parametro1:
+	PutCh		byte[EDX]
+	inc		EDX
+	cmp		byte[EDX],";"
+	je		DonePrintingParameters
+	cmp		byte[EDX],","
+	jmp		Parametro1
+
+DonePrintingParameters:
+	jmp	PrintRegisters
+
+PrintRegisters:
+	PutCh	"	"
+	PutStr	printA
+	PutLInt	[FA]
+
+	PutCh	"	"
+	PutStr	printB
+	PutLInt	[FB]
+
+	PutCh	"	"
+	PutStr	printC
+	PutLInt	[FC]
+
+	PutCh	"	"
+	PutStr	printD
+	PutLInt	[FD]
+
+	PutCh	"	"
+	PutStr	printE
+	PutLInt	[FE]
+
+	jmp	PrintFlags
+
+PrintFlags:
+	nwln
+	PutStr	flags
+	PutCh	"	"
+	mov	EDX,EAX
+	LAHF	
+	call	getValues
+	mov	EAX,EDX
+	nwln
+	nwln
+	ret
+	
+;-----------------------------------------------------------------
+;-----------------------------------------------------------------
+;-----------------------------------------------------------------	
+getValues:
+	mov	CH,AH
+	and	CH,80H
+	PutStr	printSF
+	PutInt	[SF]
+	PutCh	"	"
+	PutStr	printZF
+	PutInt	[ZF]
+	
+
+	PutCh	"	"
+	mov	CH,AH
+	and	CH,50H
+	cmp	CH,0
+	jne	Put1AF
+	PutStr	printAF
+	PutCh	"0"
+	jmp	PrintPF
+
+Put1AF:
+	PutStr	printAF
+	PutCh	"1"
+	
+PrintPF:
+	PutCh	"	"
+	mov	CH,AH
+	and	CH,30H
+	cmp	CH,0
+	jne	Put1PF
+	PutStr	printPF
+	PutCh	"0"
+	jmp	PrintCF
+
+Put1PF:
+	PutStr	printPF
+	PutCh	"1"
+	
+PrintCF:
+	PutCh	"	"
+	mov	CH,AH
+	and	CH,10H
+	cmp	CH,0
+	jne	Put1CF
+	PutStr	printCF
+	PutCh	"0"
+	jmp	DonePrintingFlags
+
+Put1CF:
+	PutStr	printCF
+	PutCh	"1"
+
+DonePrintingFlags:
+	ret
+	
+		
+	
+
+
+
+
+
+
+
