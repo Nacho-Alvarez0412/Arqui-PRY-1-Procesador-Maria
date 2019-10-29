@@ -706,12 +706,14 @@ Check:
 
 	add			EAX,2
 	mov			EDX,0
-	mov			DL,byte[EAX]
+	mov			ECX,0
+	call		CMPFirst
 	inc 			EAX
 	cmp			byte[EAX],","
 	jne			ERROR
 	inc			EAX
-	cmp 		DL,byte[EAX]
+	call 	CMPFirst2
+	cmp		DX,CX
 	je		Set0Flag
 	mov		byte[ZF],0
 	mov		byte[SF],1
@@ -721,6 +723,68 @@ Set0Flag:
 	mov	byte[ZF],1
 	mov	byte[SF],0
 	ret
+
+
+CMPFirst:
+
+	cmp	byte[EAX],"A"
+	je	ARegister
+	cmp byte[EAX],"B"
+	je BRegister
+	cmp	byte[EAX],"C"
+	je	CRegister
+	cmp byte[EAX],"D"
+	je DRegister
+	cmp byte[EAX],"E"
+	je ERegister
+
+
+ARegister:
+	mov DX,[FA]
+	ret
+BRegister:
+	mov DX,[FB]
+	ret
+CRegister:
+	mov DX,[FC]
+	ret
+DRegister:
+	mov DX,[FD]
+	ret
+ERegister:
+	mov DX,[FE]
+	ret
+
+
+CMPFirst2:
+
+	cmp	byte[EAX],"A"
+	je	ARegister2
+	cmp byte[EAX],"B"
+	je BRegister2
+	cmp	byte[EAX],"C"
+	je	CRegister2
+	cmp byte[EAX],"D"
+	je DRegister2
+	cmp byte[EAX],"E"
+	je ERegister2
+
+ARegister2:
+	mov CX,[FA]
+	ret
+BRegister2:
+	mov CX,[FB]
+	ret
+CRegister2:
+	mov CX,[FC]
+	ret
+DRegister2:
+	mov CX,[FD]
+	ret
+ERegister2:
+	mov CX,[FE]
+	ret
+
 
 ;------------------------------------------------------------------------------
 ; 				 Correr Derecha
@@ -1499,20 +1563,83 @@ Probar:
 
 	add			EAX,2
 	mov			EDX,0
-	mov			DL,byte[EAX]
-	inc 		EAX
+	mov			ECX,0
+	call		CMPFirst3
+	inc 			EAX
 	cmp			byte[EAX],","
 	jne			ERROR
 	inc			EAX
-	test 		DL,byte[EAX]
+	call 	CMPFirst4
+	cmp		DX,CX
 	je		Set0FlagTest
 	mov		byte[ZF],0
-	mov		byte[SF],1	
+	mov		byte[SF],1
 	ret
 
 Set0FlagTest:
 	mov	byte[ZF],1
 	mov	byte[SF],0
+	ret
+
+
+CMPFirst3:
+
+	cmp	byte[EAX],"A"
+	je	ARegister3
+	cmp byte[EAX],"B"
+	je BRegister3
+	cmp	byte[EAX],"C"
+	je	CRegister3
+	cmp byte[EAX],"D"
+	je DRegister3
+	cmp byte[EAX],"E"
+	je ERegister3
+
+
+ARegister3:
+	mov DX,[FA]
+	ret
+BRegister3:
+	mov DX,[FB]
+	ret
+CRegister3:
+	mov DX,[FC]
+	ret
+DRegister3:
+	mov DX,[FD]
+	ret
+ERegister3:
+	mov DX,[FE]
+	ret
+
+
+CMPFirst4:
+
+	cmp	byte[EAX],"A"
+	je	ARegister4
+	cmp byte[EAX],"B"
+	je BRegister4
+	cmp	byte[EAX],"C"
+	je	CRegister4
+	cmp byte[EAX],"D"
+	je DRegister4
+	cmp byte[EAX],"E"
+	je ERegister4
+
+ARegister4:
+	mov CX,[FA]
+	ret
+BRegister4:
+	mov CX,[FB]
+	ret
+CRegister4:
+	mov CX,[FC]
+	ret
+DRegister4:
+	mov CX,[FD]
+	ret
+ERegister4:
+	mov CX,[FE]
 	ret
 
 
@@ -1530,15 +1657,17 @@ Gemelitos:
 
 	add			EAX,2
 	mov			EDX,0
-	mov			DL,byte[EAX]
-	inc 		EAX
+	mov			ECX,0
+	call		CMPFirst5
+	inc 			EAX
 	cmp			byte[EAX],","
 	jne			ERROR
 	inc			EAX
-	and 		DL,byte[EAX]	
+	call 	CMPFirst6
+	cmp		DX,CX
 	je		Set0FlagAnd
 	mov		byte[ZF],0
-	mov		byte[SF],1	
+	mov		byte[SF],1
 	ret
 
 Set0FlagAnd:
@@ -1546,6 +1675,66 @@ Set0FlagAnd:
 	mov	byte[SF],0
 	ret
 
+
+CMPFirst5:
+
+	cmp	byte[EAX],"A"
+	je	ARegister5
+	cmp byte[EAX],"B"
+	je BRegister5
+	cmp	byte[EAX],"C"
+	je	CRegister5
+	cmp byte[EAX],"D"
+	je DRegister5
+	cmp byte[EAX],"E"
+	je ERegister5
+
+
+ARegister5:
+	mov DX,[FA]
+	ret
+BRegister5:
+	mov DX,[FB]
+	ret
+CRegister5:
+	mov DX,[FC]
+	ret
+DRegister5:
+	mov DX,[FD]
+	ret
+ERegister5:
+	mov DX,[FE]
+	ret
+
+
+CMPFirst6:
+
+	cmp	byte[EAX],"A"
+	je	ARegister6
+	cmp byte[EAX],"B"
+	je BRegister6
+	cmp	byte[EAX],"C"
+	je	CRegister6
+	cmp byte[EAX],"D"
+	je DRegister6
+	cmp byte[EAX],"E"
+	je ERegister6
+
+ARegister6:
+	mov CX,[FA]
+	ret
+BRegister6:
+	mov CX,[FB]
+	ret
+CRegister6:
+	mov CX,[FC]
+	ret
+DRegister6:
+	mov CX,[FD]
+	ret
+ERegister6:
+	mov CX,[FE]
+	ret
 
 
 

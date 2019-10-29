@@ -1,5 +1,5 @@
 *cam	B,689;
-*met	B;
-*sac	C;
-*gem	A,C;
+*cam	C,689;
+*chk	B,C;
+*cam	A,3;
 &
