@@ -54,6 +54,10 @@ Inician con * luego son 3 digitos (para facilitar la lectura de las instruccione
  //add = *sum(sumar)
  //sub = *res(restar)
 
+Instruction especial mult por 10
+
+ //*mud
+
  
 
 

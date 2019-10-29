@@ -412,7 +412,24 @@ InstructionSet18:
 	call	saltarNoCero
 	jmp	ReadInstruction
 
+
 InstructionSet19:
+	mov	EAX,EBX       ;Guarda la posicion actual en caso de no ser
+	
+	;Compara con mud
+
+	cmp	byte[EAX],"m"
+	jne	InstructionSet20
+	inc	EAX
+	cmp	byte[EAX],"u"
+	jne	InstructionSet20 
+	inc	EAX
+	cmp	byte[EAX],"d"
+	jne	InstructionSet20
+	call	multiplicar
+	jmp	ReadInstruction
+
+InstructionSet20:
 	jmp	END
 	
      
@@ -1948,7 +1965,103 @@ DonePrintingFlags:
 
 
 
+; Multiplicar por 10
 
 
+multiplicar:
 
+	add			EAX,2
+	cmp			byte[EAX],"A"
+	je			IsRegisterA5
+	cmp			byte[EAX],"B"
+	je			IsRegisterB5
+	cmp			byte[EAX],"C"
+	je			IsRegisterC5
+	cmp			byte[EAX],"D"
+	je			IsRegisterD5
+	cmp			byte[EAX],"E"
+	je			IsRegisterE5
+	jmp			ERROR			
+	ret
+
+
+IsRegisterA5:
+	mov EDX,[FA]
+	mov EBX,[FA]
+	call multi
+	call multi
+	call multi
+	call multi
+	call multi
+	call multi
+	call multi
+	call multi
+	call multi
+	mov  [FA],DX
+	ret
+
+
+IsRegisterB5:
+	mov EDX,[FB]
+	mov EBX,[FB]
+	call multi
+	call multi
+	call multi
+	call multi
+	call multi
+	call multi
+	call multi
+	call multi
+	call multi
+	mov  [FB],DX
+	ret
+
+IsRegisterC5:
+	mov EDX,[FC]
+	mov EBX,[FC]
+	call multi
+	call multi
+	call multi
+	call multi
+	call multi
+	call multi
+	call multi
+	call multi
+	call multi
+	mov [FC],DX
+	ret
+
+IsRegisterD5:
+	mov EDX,[FD]
+	mov EBX,[FD]
+	call multi
+	call multi
+	call multi
+	call multi
+	call multi
+	call multi
+	call multi
+	call multi
+	call multi
+	mov [FD],DX
+	ret
+
+IsRegisterE5:
+	mov EDX,[FE]
+	mov EBX,[FE]
+	call multi
+	call multi
+	call multi
+	call multi
+	call multi
+	call multi
+	call multi
+	call multi
+	call multi
+	mov [FE],DX
+	ret
+
+multi:
+	add EDX,EBX
+	ret
 
