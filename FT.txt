@@ -1,6 +1,8 @@
-*cam	B,689;
-*cam	C,66;
-*chk	B,C;
+*cam	C,5;
+!A-Sumatoria!
+*sum	B,C;
+*itr	A-Sumatoria
+*cam	A,0;
 &
 
 

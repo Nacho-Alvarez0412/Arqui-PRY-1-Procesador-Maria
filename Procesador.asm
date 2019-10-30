@@ -107,6 +107,7 @@ InstructionSet:
 	call		PrintInstructionSet
 
 	inc	EAX
+	
 	mov	EBX,EAX
 
 	;Compara con cam -> mov
@@ -412,24 +413,7 @@ InstructionSet18:
 	call	saltarNoCero
 	jmp	ReadInstruction
 
-
 InstructionSet19:
-	mov	EAX,EBX       ;Guarda la posicion actual en caso de no ser
-	
-	;Compara con mud
-
-	cmp	byte[EAX],"m"
-	jne	InstructionSet20
-	inc	EAX
-	cmp	byte[EAX],"u"
-	jne	InstructionSet20 
-	inc	EAX
-	cmp	byte[EAX],"d"
-	jne	InstructionSet20
-	call	multiplicar
-	jmp	ReadInstruction
-
-InstructionSet20:
 	jmp	END
 	
      
@@ -559,6 +543,7 @@ IsRegisterE:
 ;D: Dado un numero de tipo String lo retorna de tipo int
 
 GetNumber:
+
 	cmp			byte[EAX],"A"
 	je			ObtainA
 	cmp			byte[EAX],"B"
@@ -953,6 +938,7 @@ IsE2:
 Sumar:
 
 	add			EAX,2
+
 	cmp			byte[EAX],"A"
 	je			AddA
 	cmp			byte[EAX],"B"
@@ -969,7 +955,7 @@ Sumar:
 
 AddA:
 	mov			EBX,[FA]
-	push			EBX
+
 	add			EAX,2
 	
 	cmp			byte[EAX],"A"
@@ -987,13 +973,13 @@ AddA:
 	cmp			byte[EAX],"E"
 	je			AddRE
 
-	jmp			AddNumberA
 
 AddB:
 	mov			EBX,[FB]
-	push			EBX	
+
 	
 	add			EAX,2
+
 	
 	cmp			byte[EAX],"A"
 	je			AddRA
@@ -1010,11 +996,10 @@ AddB:
 	cmp			byte[EAX],"E"
 	je			AddRE
 	
-	jmp			AddNumberB
 
 AddC:
 	mov			EBX,[FC]
-	push			EBX
+
 	add			EAX,2
 	
 	cmp			byte[EAX],"A"
@@ -1032,11 +1017,10 @@ AddC:
 	cmp			byte[EAX],"E"
 	je			AddRE
 
-	jmp			AddNumberC
 
 AddD:
 	mov			EBX,[FD]
-	push			EBX
+
 	add			EAX,2
 	
 	cmp			byte[EAX],"A"
@@ -1054,11 +1038,10 @@ AddD:
 	cmp			byte[EAX],"E"
 	je			AddRE
 
-	jmp			AddNumberD
 
 AddE:
 	mov			EBX,[FE]
-	push			EBX
+
 	add			EAX,2
 	
 	cmp			byte[EAX],"A"
@@ -1076,81 +1059,67 @@ AddE:
 	cmp			byte[EAX],"E"
 	je			AddRE
 
-	jmp			AddNumberE
 
 AddRA:
 	add			EBX,[FA]
-	mov			[FA],EBX
 	jmp			SumaEnd
 
 AddRB:
 	add			EBX,[FB]
-	mov			[FB],EBX
 	jmp			SumaEnd
 
 AddRC:
 	add			EBX,[FC]
-	mov			[FC],EBX
 	jmp			SumaEnd
 
 
 AddRD:
 	add			EBX,[FD]
-	mov			[FD],EBX
 	jmp			SumaEnd
 
 
 AddRE:
 	add			EBX,[FE]
-	mov			[FE],EBX
 	jmp			SumaEnd
 
-AddNumberA:
-	mov			ECX,0
-	call			GetNumber
-	pop			EBX
-	add			EBX,ECX
-	mov			[FA],EBX
-	jmp			SumaEnd
-
-AddNumberB:
-	mov			ECX,0
-	call			GetNumber
-	pop			EBX
-
-	add			EBX,ECX
-	mov			[FB],EBX
-
-	jmp			SumaEnd
-
-AddNumberC:
-	mov			ECX,0
-	call			GetNumber
-	pop			EBX
-
-	add			EBX,ECX
-	mov			[FC],EBX
-	jmp			SumaEnd
-
-AddNumberD:
-	mov			ECX,0
-	call			GetNumber
-	pop			EBX
-
-	add			EBX,ECX
-	mov			[FD],EBX
-	jmp			SumaEnd
-
-AddNumberE:
-	mov			ECX,0
-	call			GetNumber
-	pop			EBX
-
-	add			EBX,ECX
-	mov			[FE],EBX
-	jmp			SumaEnd
 
 SumaEnd:
+	sub			EAX,2
+
+	cmp			byte[EAX],"A"
+	je			AdditionA
+
+	cmp			byte[EAX],"B"
+	je			AdditionB
+
+	cmp			byte[EAX],"C"
+	je			AdditionC
+
+	cmp			byte[EAX],"D"
+	je			AdditionD
+
+	cmp			byte[EAX],"E"
+	je			AdditionE
+
+
+AdditionA:
+	mov			[FA],EBX
+	ret
+
+AdditionB:
+	mov			[FB],EBX
+	ret
+
+AdditionC:
+	mov			[FC],EBX
+	ret
+
+AdditionD:
+	mov			[FD],EBX
+	ret
+
+AdditionE:
+	mov			[FE],EBX
 	ret
 
 
@@ -1181,7 +1150,7 @@ Restar:
 
 RestarA:
 	mov			EBX,[FA]
-	push			EBX
+
 	add			EAX,2
 	
 	cmp			byte[EAX],"A"
@@ -1199,11 +1168,11 @@ RestarA:
 	cmp			byte[EAX],"E"
 	je			RestarRE
 
-	jmp			RestarNumberA
+
 
 RestarB:
 	mov			EBX,[FB]
-	push			EBX	
+
 	
 	add			EAX,2
 	
@@ -1222,11 +1191,10 @@ RestarB:
 	cmp			byte[EAX],"E"
 	je			RestarRE
 	
-	jmp			RestarNumberB
+
 
 RestarC:
 	mov			EBX,[FC]
-	push			EBX
 	add			EAX,2
 	
 	cmp			byte[EAX],"A"
@@ -1244,11 +1212,11 @@ RestarC:
 	cmp			byte[EAX],"E"
 	je			RestarRE
 
-	jmp			RestarNumberC
+
 
 RestarD:
 	mov			EBX,[FD]
-	push			EBX
+
 	add			EAX,2
 	
 	cmp			byte[EAX],"A"
@@ -1266,11 +1234,11 @@ RestarD:
 	cmp			byte[EAX],"E"
 	je			RestarRE
 
-	jmp			RestarNumberD
+
 
 RestarE:
 	mov			EBX,[FE]
-	push			EBX
+
 	add			EAX,2
 	
 	cmp			byte[EAX],"A"
@@ -1288,82 +1256,68 @@ RestarE:
 	cmp			byte[EAX],"E"
 	je			RestarRE
 
-	jmp			RestarNumberE
+
 
 RestarRA:
 	sub			EBX,[FA]
-	mov			[FA],EBX
 	jmp			RestaEnd
 
 RestarRB:
 	sub			EBX,[FB]
-	mov			[FB],EBX
 	jmp			RestaEnd
 
 RestarRC:
-	add			EBX,[FC]
-	mov			[FC],EBX
+	sub			EBX,[FC]
 	jmp			RestaEnd
 
 
 RestarRD:
-	add			EBX,[FD]
-	mov			[FD],EBX
+	sub			EBX,[FD]
 	jmp			RestaEnd
 
 
 RestarRE:
-	add			EBX,[FE]
-	mov			[FE],EBX
+	sub			EBX,[FE]
 	jmp			RestaEnd
 
-RestarNumberA:
-	mov			ECX,0
-	call			GetNumber
-	pop			EBX
-	sub			EBX,ECX
-	mov			[FA],EBX
-	jmp			RestaEnd
-
-RestarNumberB:
-	mov			ECX,0
-	call			GetNumber
-	pop			EBX
-
-	sub			EBX,ECX
-	mov			[FB],EBX
-
-	jmp			RestaEnd
-
-RestarNumberC:
-	mov			ECX,0
-	call			GetNumber
-	pop			EBX
-
-	sub			EBX,ECX
-	mov			[FC],EBX
-	jmp			RestaEnd
-
-RestarNumberD:
-	mov			ECX,0
-	call			GetNumber
-	pop			EBX
-
-	sub			EBX,ECX
-	mov			[FD],EBX
-	jmp			RestaEnd
-
-RestarNumberE:
-	mov			ECX,0
-	call			GetNumber
-	pop			EBX
-
-	sub			EBX,ECX
-	mov			[FE],EBX
-	jmp			RestaEnd
 
 RestaEnd:
+	sub			EAX,2
+	cmp			byte[EAX],"A"
+	je			SubstractA
+
+	cmp			byte[EAX],"B"
+	je			SubstractB
+
+	cmp			byte[EAX],"C"
+	je			SubstractC
+
+	cmp			byte[EAX],"D"
+	je			SubstractD
+
+	cmp			byte[EAX],"E"
+	je		SubstractE					
+
+SubstractA:
+	mov		[FA],EBX
 	ret
+
+SubstractB:
+	mov		[FB],EBX
+	ret
+
+SubstractC:
+	mov		[FC],EBX
+	ret
+
+SubstractD:
+	mov		[FD],EBX
+	ret
+
+SubstractE:
+	mov		[FE],EBX
+	ret
+	
 
 
 ;------------------------------------------------------------------------------
@@ -1965,103 +1919,7 @@ DonePrintingFlags:
 
 
 
-; Multiplicar por 10
 
 
-multiplicar:
 
-	add			EAX,2
-	cmp			byte[EAX],"A"
-	je			IsRegisterA5
-	cmp			byte[EAX],"B"
-	je			IsRegisterB5
-	cmp			byte[EAX],"C"
-	je			IsRegisterC5
-	cmp			byte[EAX],"D"
-	je			IsRegisterD5
-	cmp			byte[EAX],"E"
-	je			IsRegisterE5
-	jmp			ERROR			
-	ret
-
-
-IsRegisterA5:
-	mov EDX,[FA]
-	mov EBX,[FA]
-	call multi
-	call multi
-	call multi
-	call multi
-	call multi
-	call multi
-	call multi
-	call multi
-	call multi
-	mov  [FA],DX
-	ret
-
-
-IsRegisterB5:
-	mov EDX,[FB]
-	mov EBX,[FB]
-	call multi
-	call multi
-	call multi
-	call multi
-	call multi
-	call multi
-	call multi
-	call multi
-	call multi
-	mov  [FB],DX
-	ret
-
-IsRegisterC5:
-	mov EDX,[FC]
-	mov EBX,[FC]
-	call multi
-	call multi
-	call multi
-	call multi
-	call multi
-	call multi
-	call multi
-	call multi
-	call multi
-	mov [FC],DX
-	ret
-
-IsRegisterD5:
-	mov EDX,[FD]
-	mov EBX,[FD]
-	call multi
-	call multi
-	call multi
-	call multi
-	call multi
-	call multi
-	call multi
-	call multi
-	call multi
-	mov [FD],DX
-	ret
-
-IsRegisterE5:
-	mov EDX,[FE]
-	mov EBX,[FE]
-	call multi
-	call multi
-	call multi
-	call multi
-	call multi
-	call multi
-	call multi
-	call multi
-	call multi
-	mov [FE],DX
-	ret
-
-multi:
-	add EDX,EBX
-	ret
 
